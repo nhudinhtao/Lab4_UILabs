@@ -95,13 +95,6 @@ public class ToDoManagerActivity extends ListActivity {
                 break;
         }
 
-
-
-            
-            
-            
-		
-
 	}
 
 	// Do not modify below here
