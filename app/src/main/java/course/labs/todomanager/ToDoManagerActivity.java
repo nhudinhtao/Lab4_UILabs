@@ -24,8 +24,8 @@ import android.widget.TextView;
 import course.labs.todomanager.ToDoItem.Priority;
 import course.labs.todomanager.ToDoItem.Status;
 
-public class ToDoManagerActivity extends ListActivity {
-
+public class ToDoManagerActivity extends ListActivity
+{
 	private static final int ADD_TODO_ITEM_REQUEST = 0;
 	private static final String FILE_NAME = "TodoManagerActivityData.txt";
 	private static final String TAG = "Lab-UserInterface";
@@ -46,33 +46,29 @@ public class ToDoManagerActivity extends ListActivity {
 		// Put divider between ToDoItems and FooterView
 		getListView().setFooterDividersEnabled(true);
 
-		// Inflate footerView for footer_view.xml file
-
-		TextView footerView = (TextView) getLayoutInflater().inflate(R.layout.footer_view, null);
-
+		// TODO - Inflate footerView for footer_view.xml file
+		TextView footerView = (TextView)getLayoutInflater().inflate(R.layout.footer_view, null);
 
 		// NOTE: You can remove this block once you've implemented the assignment
 		if (null == footerView) {
 			return;
 		}
-		// Add footerView to ListView
-        getListView().addFooterView(footerView);
-
-		// Attach Listener to FooterView
+		
+		// TODO - Add footerView to ListView
+		getListView().addFooterView(footerView);
+		
 		footerView.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				Log.i(TAG,"Entered footerView.OnClickListener.onClick()");
 
-
-				// Implement OnClick().
-                Intent intent = new Intent(ToDoManagerActivity.this, AddToDoActivity.class);
-                startActivityForResult(intent, ADD_TODO_ITEM_REQUEST);
+				//TODO - Implement OnClick().
+				startActivityForResult(new Intent(ToDoManagerActivity.this, AddToDoActivity.class), ADD_TODO_ITEM_REQUEST);
 			}
 		});
 
 		// TODO - Attach the adapter to this ListActivity's ListView
-        getListView().setAdapter(mAdapter);
-		
+		getListView().setAdapter(mAdapter);
 	}
 
 	@Override
@@ -80,21 +76,15 @@ public class ToDoManagerActivity extends ListActivity {
 
 		Log.i(TAG,"Entered onActivityResult()");
 
-		// Check result code and request code
+		// TODO - Check result code and request code
 		// if user submitted a new ToDoItem
 		// Create a new ToDoItem from the data Intent
 		// and then add it to the adapter
-        switch (requestCode){
-            case ADD_TODO_ITEM_REQUEST:
-                if (resultCode == RESULT_OK) {
-                    ToDoItem todoItem = new ToDoItem(data);
-                    mAdapter.add(todoItem);
-                }
-                break;
-            default:
-                break;
-        }
-
+		if(requestCode == ADD_TODO_ITEM_REQUEST && resultCode == RESULT_OK)
+		{
+			ToDoItem item = new ToDoItem(data);
+			mAdapter.add(item);
+		}
 	}
 
 	// Do not modify below here
@@ -104,7 +94,6 @@ public class ToDoManagerActivity extends ListActivity {
 		super.onResume();
 
 		// Load saved ToDoItems, if necessary
-
 		if (mAdapter.getCount() == 0)
 			loadItems();
 	}
@@ -114,9 +103,7 @@ public class ToDoManagerActivity extends ListActivity {
 		super.onPause();
 
 		// Save ToDoItems
-
 		saveItems();
-
 	}
 
 	@Override
@@ -143,12 +130,10 @@ public class ToDoManagerActivity extends ListActivity {
 	}
 
 	private void dump() {
-
 		for (int i = 0; i < mAdapter.getCount(); i++) {
 			String data = ((ToDoItem) mAdapter.getItem(i)).toLog();
 			Log.i(TAG,	"Item " + i + ": " + data.replace(ToDoItem.ITEM_SEP, ","));
 		}
-
 	}
 
 	// Load stored ToDoItems
@@ -167,8 +152,7 @@ public class ToDoManagerActivity extends ListActivity {
 				priority = reader.readLine();
 				status = reader.readLine();
 				date = ToDoItem.FORMAT.parse(reader.readLine());
-				mAdapter.add(new ToDoItem(title, Priority.valueOf(priority),
-						Status.valueOf(status), date));
+				mAdapter.add(new ToDoItem(title, Priority.valueOf(priority), Status.valueOf(status), date));
 			}
 
 		} catch (FileNotFoundException e) {
@@ -193,13 +177,10 @@ public class ToDoManagerActivity extends ListActivity {
 		PrintWriter writer = null;
 		try {
 			FileOutputStream fos = openFileOutput(FILE_NAME, MODE_PRIVATE);
-			writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(
-					fos)));
+			writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(fos)));
 
 			for (int idx = 0; idx < mAdapter.getCount(); idx++) {
-
 				writer.println(mAdapter.getItem(idx));
-
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
